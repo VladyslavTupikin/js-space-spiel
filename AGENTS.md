@@ -157,3 +157,14 @@ To ensure the accuracy of structured data (Tables, Trees, Lists) within the Asse
 2.  **Typo Prevention (Zero Tolerance):** The Agent must perform a final "Scan-for-Typos" on all text within code blocks. A typo in an Asset Layer (e.g., `team-lagner.js` instead of `team-manager.js`) is considered a failure of Engineering Correctness.
 3.  **Identifier Consistency:** All identifiers in the Asset Layer must exactly match the casing and naming conventions used in the actual codebase.
 4.  **Mandatory Self-Correction:** If the Agent detects a mismatch between its drafted Asset Layer and the technical reality of the codebase, it must abort the response and rewrite the Asset Layer.
+
+## 9. Project-Specific Constraints
+
+### 9.1 Rendering Engine Constraint
+
+- **Strict Prohibition:** The use of `<canvas>`, WebGL, or any external rendering/game libraries (e.g., PixiJS, Phaser) is strictly forbidden.
+- **Mandatory Approach:** All game world rendering and animations must be achieved through **pure DOM manipulation**.
+- **Implementation Standard:**
+  - Game entities must be represented by HTML elements (e.g., `<div>`, `<span>`).
+  - Movement, scaling, and transformations must be managed via CSS properties (`top`, `left`, `transform`, `opacity`) and CSS Transitions/Animations.
+  - The DOM tree serves as the primary scene graph.
