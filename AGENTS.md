@@ -57,6 +57,16 @@ Before finalizing any response, the Agent **must** perform a "Regex-style" scan 
 - **The Violation Trigger:** If any structural character is detected outside of a ` ``` ` block, the Agent **must not** output the response.
 - **The Remediation:** The Agent must immediately move the identified structure into the **Asset Layer** (Code Block) before the response is finalized.
 
+### 4.1 Mandatory Pre-Output Checklist
+
+Before finalizing and sending any response, the Agent MUST verify:
+
+1.  **[ ] Source-of-Truth Check:** Have I verified that all filenames, variable names, and class names exist in the actual codebase?
+2.  **[ ] Structural Leakage Check:** Have I scanned my entire response for pipes (`|`), tabs (`\t`), or leading indentation used for alignment? If found, are they enclosed in a ` ``` ` block?
+3.  **[ ] Layer Partitioning Check:** Is all structured data (tables, trees, lists) strictly located in the **Asset Layer** (code blocks)?
+4.  **[ ] Constraint Check:** Does the response respect the "No Canvas/No Library" and "ES6+ ESM" constraints?
+5.  **[ ] License Check:** If code was generated, does it include the required GPLv3 header?
+
 ## 5. Language Standard & Environment
 
 The project is strictly an **ES6+ (ECMAScript 2015+)** environment using **ES Modules (ESM)**.
@@ -168,3 +178,36 @@ To ensure the accuracy of structured data (Tables, Trees, Lists) within the Asse
   - Game entities must be represented by HTML elements (e.g., `<div>`, `<span>`).
   - Movement, scaling, and transformations must be managed via CSS properties (`top`, `left`, `transform`, `opacity`) and CSS Transitions/Animations.
   - The DOM tree serves as the primary scene graph.
+
+### 10. UML Integrity & Verification
+
+The Agent must act as a bridge between the **Implementation Truth** (Code) and the **Architectural Blueprint** (UML). When reviewing code or proposing changes, the Agent must perform a "Sync-Check" against the project's `.puml` files.
+
+#### 10.1 The UML Audit Protocol
+
+Whenever the Agent interacts with a class-based module, it must execute the following verification steps:
+
+1.  **Signature Synchronization:**
+    - Verify that all public methods and attributes defined in the `.puml` exist in the `.js` implementation.
+    - Flag any "Ghost Methods" (methods present in UML but missing in Code).
+    - Flag any "Undocumented Features" (methods present in Code but missing in UML).
+
+2.  **Visibility Alignment:**
+    - Ensure that visibility markers in the `.puml` (`+`, `-`, `#`) match the actual JavaScript access modifiers (`public`, `#private`, `protected` via convention).
+
+3.  **Relationship Validation:**
+
+
+    *   Confirm that the relationship types in the UML (Composition, Aggregation, Inheritance) accurately represent the object lifecycle in the code.
+    *   *Example:* If the code uses `new Point()` inside the `Ship` constructor, the UML must use Composition (`*--`), not Aggregation (`o--`).
+
+4.  **Type Consistency:**
+    - Verify that the types declared in the UML (e.g., `int`, `string`, `Point`) match the actual runtime logic and TypeDocs/JSDoc in the implementation.
+
+#### 10.2 Mandatory Reporting
+
+If a discrepancy is detected between the Code and the UML, the Agent **must not** simply ignore it. The Agent must:
+
+- **Identify the Drift:** State clearly which file and which specific member is out of sync.
+- **Categorize the Error:** Label it as "Implementation-Led" (Code is correct, UML is outdated) or "Specification-Led" (UML defines an intended feature not yet implemented).
+- **Propose a Reconciliation:** Suggest a specific update to either the `.js` file or the `.puml` file to restore structural integrity.
