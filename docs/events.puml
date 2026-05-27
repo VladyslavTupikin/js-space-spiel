@@ -24,4 +24,18 @@ class PlayerMoveEvent {
     + getKeyButton(): String
 }
 
+interface OnMoveListener <<interface>> {
+    + onMove(e: PlayerMoveEvent): void
+}
+
+class CollisionEvent {
+    - collisionObject: String
+    - timestamp: long
+    + detectCollision(): String
+}
+
+interface OnCollisionListener <<interface>> {
+    + onCollision(e: CollisionEvent): void
+}
+
 @enduml

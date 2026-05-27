@@ -26,7 +26,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 /' Player Movement event dependencies '/
 PlayerShip "1" o-- "*" OnMoveListener : manages >
 OnMoveListener .> PlayerMoveEvent : depends on / consumes >
-CollisionEngine .up.|> OnMoveListener : implements
+CollisionEngine .up.|> OnMoveListener : subscribes
 
+
+/' Player Movement Collision event dependencies '/
+CollisionEngine "1" o-- "*" OnCollisionListener : manages >
+OnCollisionListener .> CollisionEvent : depends on / consumes >
+Render .up.|> OnCollisionListener : subscribes
 
 @enduml

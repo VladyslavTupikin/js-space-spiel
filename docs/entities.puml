@@ -53,6 +53,7 @@ class PlayerShip extends Ship {
     .. Movement ..
     + <<override>> moveUp() : void
     + <<override>> moveDown() : void
+    .. Event Listener ..
     + addMoveListener(l: OnMoveListener): void
     + removeMoveListener(l: OnMoveListener): void
 }

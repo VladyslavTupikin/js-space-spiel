@@ -57,15 +57,29 @@ Before finalizing any response, the Agent **must** perform a "Regex-style" scan 
 - **The Violation Trigger:** If any structural character is detected outside of a ` ``` ` block, the Agent **must not** output the response.
 - **The Remediation:** The Agent must immediately move the identified structure into the **Asset Layer** (Code Block) before the response is finalized.
 
-### 4.1 Mandatory Pre-Output Checklist
+#### 4.1 Mandatory Pre-Output Checklist & Remediation
 
 Before finalizing and sending any response, the Agent MUST verify:
 
-1.  **[ ] Source-of-Truth Check:** Have I verified that all filenames, variable names, and class names exist in the actual codebase?
-2.  **[ ] Structural Leakage Check:** Have I scanned my entire response for pipes (`|`), tabs (`\t`), or leading indentation used for alignment? If found, are they enclosed in a ` ``` ` block?
-3.  **[ ] Layer Partitioning Check:** Is all structured data (tables, trees, lists) strictly located in the **Asset Layer** (code blocks)?
-4.  **[ ] Constraint Check:** Does the response respect the "No Canvas/No Library" and "ES6+ ESM" constraints?
-5.  **[ ] License Check:** If code was generated, does it include the required GPLv3 header?
+1.  [ ] **Source-of-Truth Check:** Have I verified that all filenames, variable names, and class names exist in the actual codebase?
+    - _If [X] is False:_ **STOP.** Use `ls` or `read_file` to confirm the identifier.
+2.  [ ] **Structural Leakage Check:** Have I scanned my entire response for pipes (`|`), tabs (`\t`), or leading indentation used for alignment?
+    - _If [X] is False:_ **STOP.** Move the detected structure into an Asset Layer (Code Block).
+3.  [ ] **Layer Partitioning Check:** Is all structured data (tables, trees, lists) strictly located in the **Asset Layer** (code blocks)?
+    - _If [X] is False:_ **STOP.** Refactor the response to encapsulate the data.
+4.  [ ] **Constraint Check:** Does the response respect the "No Canvas/No Library" and "ES6+ ESM" constraints?
+    - _If [X] is False:_ **STOP.** Rewrite the implementation logic.
+5.  [ ] **License Check:** If code was generated, does it include the required GPLv3 header?
+    - _If [X] is False:_ **STOP.** Apply the standard GPLv3 header.
+
+### 4.2 Output Sanitization & Formatting Rules
+
+To ensure maximum human readability and prevent structural breakage, the Agent MUST adhere to these formatting constraints:
+
+1.  **No LaTeX in Prose:** Never use LaTeX mathematical notation (e.g., `$\rightarrow$`, `$\pm$`, or `$\forall$`) within the Narrative Layer. Use standard ASCII characters (e.g., `->`, `+/-`, or `for all`) or plain English.
+2.  **Zero-Tolerance for Uncontained Pipes:** The character `|` is a structural trigger. It must **never** appear in the Narrative Layer unless it is part of a standard word (e.g., "pipe"). If you intend to create a table, list, or comparison, you **must** wrap the entire structure in an Asset Layer (Code Block).
+3.  **Atomic Response Check:** Before clicking "Send", the Agent must verify that no sentence in the Narrative Layer ends abruptly or is cut off due to a failed structural calculation.
+4.  **No Mathematical Symbols for Logic:** Use plain arrows (`->`) or words (`leads to`) instead of mathematical symbols (`$\Rightarrow$`) to describe logic flows in text.
 
 ## 5. Language Standard & Environment
 
@@ -196,10 +210,8 @@ Whenever the Agent interacts with a class-based module, it must execute the foll
     - Ensure that visibility markers in the `.puml` (`+`, `-`, `#`) match the actual JavaScript access modifiers (`public`, `#private`, `protected` via convention).
 
 3.  **Relationship Validation:**
-
-
-    *   Confirm that the relationship types in the UML (Composition, Aggregation, Inheritance) accurately represent the object lifecycle in the code.
-    *   *Example:* If the code uses `new Point()` inside the `Ship` constructor, the UML must use Composition (`*--`), not Aggregation (`o--`).
+    - Confirm that the relationship types in the UML (Composition, Aggregation, Inheritance) accurately represent the object lifecycle in the code.
+    - _Example:_ If the code uses `new Point()` inside the `Ship` constructor, the UML must use Composition (`*--`), not Aggregation (`o--`).
 
 4.  **Type Consistency:**
     - Verify that the types declared in the UML (e.g., `int`, `string`, `Point`) match the actual runtime logic and TypeDocs/JSDoc in the implementation.

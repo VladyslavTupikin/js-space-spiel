@@ -25,6 +25,8 @@ class Render {
     .. General ..
     + toString() : String
     + isGameObjectExist() : boolean
+    .. Events ..
+    + onCollision(e: CollisionEvent): void
 }
 
 class RenderEngine <<singleton>> {
@@ -40,18 +42,23 @@ class RenderEngine <<singleton>> {
     .. Getters / Setters ..
     +getInstance() : RenderEngine
     .. Events ..
-    + onMove(e: PlayerMoveEvent): void
+    + onCollision(e: CollisionEvent): void
 }
 
 class CollisionEngine <<singleton>> {
     -instance : CollisionEngine
+    - listeners: List<OnCollisionListener>
     --
     -CollisionEngine()
     .. General ..
     + toString() : String
     .. Getters / Setters ..
     +getInstance() : CollisionEngine
-    + onMove(e: PlayerMoveEvent): void
+    .. Event Listener ..
+    + addMoveListener(l: OnCollisionListener): void
+    + removeMoveListener(l: OnCollisionListener): void
+    .. Events ..
+     + onMove(e: PlayerMoveEvent): void
 }
 
 @enduml
