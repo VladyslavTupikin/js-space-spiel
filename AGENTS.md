@@ -1,3 +1,14 @@
+# Project Architecture
+
+This is a DOM-Based Game, HTML, CSS and javascript application with:
+
+- Design as PlantUML in `/docs`
+- Class declarations as modules `/sripts/modules`
+- State management using Redux in `/src/store`
+- Main HTLM file `/index.html`
+- Rules for Agent `/AGENTS.md`
+- Styles as CSS `/css`
+
 # Agent Reasoning & Decision-Making Principles
 
 This document serves as a core directive for the Agent to prevent logical fallacies and ensure high-quality, professional-grade code reviews and suggestions.
@@ -154,24 +165,20 @@ Before finalizing any response, the Agent must perform a **Structural Integrity 
 2. **Verify:** For every "Trigger" found, verify it is enclosed within a ` ``` ` block.
 3. **Remediate:** If a structural element is found in the **Narrative Layer**, the Agent must rewrite the response to move that element into the **Asset Layer** before outputting.
 
-### 8.1 Layer Assignment Mandate (New Rule)
+### 8.1 Layer Assignment Mandate
 
 Before generating any character of the response, the Agent must execute a "Layer Partitioning" step:
 
-1. **Identify Structural Intent:** If the planned response contains any element that uses
-   vertical alignment, columns, or delimiters (e.g., a comparison, a list of metrics,
-   or a breakdown of findings), the Agent must explicitly categorize this as "ASSET LAYER".
+1.  **Identify Structural Intent:** If the planned response contains any element that uses vertical alignment, columns, or delimiters (e.g., a comparison, a list of metrics, or a breakdown of findings), the Agent must explicitly categorize this as "ASSET LAYER".
 
-2. **Enforce Containerization:** Once an element is categorized as "ASSET LAYER", the
-   Agent is strictly prohibited from writing it directly into the text stream.
-3. **The "Zero-Leakage" Rule:** Any use of the characters `|`, `\t`, or leading
-   indentation for the purpose of alignment/structure _outside_ of a ` ``` `
-   block is a violation of this protocol.
+2.  **Enforce Containerization:** Once an element is categorized as "ASSET LAYER", the Agent is strictly prohibited from writing it directly into the text stream.
 
-4. **Validation Trigger:** If a response is being drafted and a pipe (`|`), tab (`\t`),
-   or leading indentation is detected in the "Narrative" draft, the Agent must
-   automatically abort the current draft and restart the response with the
-   identifed structure moved to the "Asset Layer".
+3.  **The "Zero-Leakage" Rule:** Any use of the characters `|`, `\t`, or leading indentation for the purpose of alignment/structure _outside_ of a ` ``` ` block is a violation of this protocol.
+
+4.  **CRITICAL: The "Circuit Breaker" Rule:** If, during the drafting of the Narrative Layer, the Agent detects a structural trigger (like a `|`) being typed, the Agent **MUST NOT** attempt to "fix" the sentence within the same draft. The Agent **MUST** immediately trigger the **Self-Correction Protocol**:
+    - **ABORT** the current draft.
+    - **RESTART** the response from the beginning.
+    - **RE-ALLOCATE** the identified structure to the **Asset Layer** (Code Block) before drafting the Narrative.
 
 ### 8.2 Asset Layer Integrity Protocol
 
