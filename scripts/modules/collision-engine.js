@@ -1,5 +1,5 @@
 /*
-index.css: Main CSS file connected to the HTML page.
+collision-engine.js: Module describes collision engine class.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,7 +17,20 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-@import url("./styles/game-container.css");
-@import url("./styles/map.css");
-@import url("./styles/player-ship.css");
-@import url("./styles/stats.css");
+import { CollisionModel } from "./collision-model.js";
+
+export class CollisionEngine {
+  static #instance = null;
+
+  constructor() {
+    if (CollisionEngine.#instance) {
+      return CollisionEngine.#instance;
+    }
+
+    CollisionEngine.#instance = this;
+  }
+
+  toString() {
+    return ``;
+  }
+}

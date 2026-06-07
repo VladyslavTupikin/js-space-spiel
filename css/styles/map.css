@@ -1,5 +1,5 @@
 /*
-index.css: Main CSS file connected to the HTML page.
+map.css: Style CSS file for the game Map.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,7 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-@import url("./styles/game-container.css");
-@import url("./styles/map.css");
-@import url("./styles/player-ship.css");
-@import url("./styles/stats.css");
+.map {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  height: 500px;
+  border: 3px solid rgb(0, 0, 0);
+}

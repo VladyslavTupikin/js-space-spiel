@@ -1,5 +1,5 @@
 /*
-index.js: Main script for running game logic.
+render-engine.js: Module describes render engine class.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -16,3 +16,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+export class RenderEngine {
+  static #instance = null;
+
+  constructor() {
+    if (RenderEngine.#instance) {
+      return RenderEngine.#instance;
+    }
+
+    RenderEngine.#instance = this;
+  }
+
+  toString() {
+    return ``;
+  }
+
+  async startRenderEngine() {
+    const map = window.getEtlementsByClassName("map")[0];
+
+    while (true) {
+      await new Promise((resolve) => setTimeout(resolve, 16)); // ~60 FPS
+
+      for (const object of this.#renderObjects) {
+        object.render();
+      }
+    }
+  }
+}

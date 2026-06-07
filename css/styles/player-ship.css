@@ -1,5 +1,5 @@
 /*
-index.css: Main CSS file connected to the HTML page.
+player-ship.css: Style CSS file for the Players Ship.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,7 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-@import url("./styles/game-container.css");
-@import url("./styles/map.css");
-@import url("./styles/player-ship.css");
-@import url("./styles/stats.css");
+.player-ship {
+  display: absolute;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background-color: rgb(255, 0, 0);
+}
