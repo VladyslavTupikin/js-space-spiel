@@ -24,18 +24,37 @@ class PlayerMoveEvent {
     + getKeyButton(): String
 }
 
+class EnemyMoveEvent {
+    - coordinates: Point
+    - timestamp: long
+    + getEnemyMovement(): String
+}
+
 interface OnMoveListener <<interface>> {
-    + onMove(e: PlayerMoveEvent): void
+    + onPlayerMove(e: PlayerMoveEvent): void
+    + onEnemyMove(e: EnemyMoveEvent): void
 }
 
 class CollisionEvent {
     - collisionObject: String
     - timestamp: long
-    + detectCollision(): String
+    + detectMovementCollision(): String
+    + detectFireCollision(): String
 }
 
 interface OnCollisionListener <<interface>> {
     + onCollision(e: CollisionEvent): void
 }
+
+class PistolGunFireEvent {
+    - gunObject: String
+    - timestamp: long
+    + getFireButton(): String
+}
+
+interface OnPistolGunFireListener <<interface>> {
+    + onPistolGunFire(e: PistolGunFireEvent): void
+}
+
 
 @enduml

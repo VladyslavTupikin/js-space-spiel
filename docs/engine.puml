@@ -18,17 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '/
 
-class Render {
-    -gameObject:
-    --
-    -Render()
-    .. General ..
-    + toString() : String
-    + isGameObjectExist() : boolean
-    .. Events ..
-    + onCollision(e: CollisionEvent): void
-}
-
 class RenderEngine <<singleton>> {
     -objectsToRender : Renderer[]
     -instance : RenderEngine
@@ -41,24 +30,45 @@ class RenderEngine <<singleton>> {
     + removeRenderObj() : boolean
     .. Getters / Setters ..
     +getInstance() : RenderEngine
-    .. Events ..
-    + onCollision(e: CollisionEvent): void
 }
 
-class CollisionEngine <<singleton>> {
-    -instance : CollisionEngine
-    - listeners: List<OnCollisionListener>
+class CollisionModel {
+    - id: int
+    - radius: int
+    - center: Point
     --
-    -CollisionEngine()
+    - CollisionModel()
     .. General ..
     + toString() : String
     .. Getters / Setters ..
-    +getInstance() : CollisionEngine
+    + getID() : int
+}
+
+class CollisionEngine <<singleton>> {
+    - instance : CollisionEngine
+    - collisionObjects: CollisionModel[]
+    - listeners: List<OnCollisionListener>
+    --
+    - CollisionEngine()
+    .. General ..
+    + toString() : String
+    + addCollisionObject() : boolean
+    + removeCollisionObject() : boolean
+    .. Getters / Setters ..
+    + getInstance() : CollisionEngine
     .. Event Listener ..
     + addMoveListener(l: OnCollisionListener): void
     + removeMoveListener(l: OnCollisionListener): void
     .. Events ..
-     + onMove(e: PlayerMoveEvent): void
+    + onPlayerMove(e: PlayerMoveEvent): void
+    + onEnemyMove(e: EnemyMoveEvent): void
+    + onPistolGunFire(e: PistolGunFireEvent): void
+}
+
+class PhysicsEngine <<singleton>> {
+    - instance : PhysicsEngine
+    .. Getters / Setters ..
+    + getInstance() : PhysicsEngine
 }
 
 @enduml

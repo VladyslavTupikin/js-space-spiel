@@ -17,30 +17,75 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Database } from "./db.js";
+
 export class RenderEngine {
   static #instance = null;
+  #db;
+  #isRendering = false; // Tracks the state of the render loop
 
-  constructor() {
+  constructor(db) {
     if (RenderEngine.#instance) {
       return RenderEngine.#instance;
     }
 
+    if (!(db instanceof Database)) {
+      throw new TypeError(
+        "Invalid type: parameter db must be an instance of Database",
+      );
+    }
+
     RenderEngine.#instance = this;
+    this.#db = db;
   }
 
   toString() {
-    return ``;
+    return `[object RenderEngine]`;
   }
 
+  /**
+   * Stops the continuous render loop.
+   */
+  stopRenderEngine() {
+    this.#isRendering = false;
+  }
+
+  /**
+   * Starts the continuous async render loop at ~30 FPS.
+   */
   async startRenderEngine() {
-    const map = window.getEtlementsByClassName("map")[0];
+    if (this.#isRendering) return; // Prevent multiple loops from running simultaneously
+    this.#isRendering = true;
 
-    while (true) {
-      await new Promise((resolve) => setTimeout(resolve, 16)); // ~60 FPS
+    const targetFPS = 30;
+    const frameDuration = 1000 / targetFPS; // ~33.33ms
 
-      for (const object of this.#renderObjects) {
-        object.render();
+    const renderCB = (node) => {
+      if (node.object) {
+        node.object.renderObject();
       }
+    };
+
+    while (this.#isRendering) {
+      const startTime = performance.now();
+
+      try {
+        // Await the asynchronous DFS traversal execution
+        this.#db.renderModels.dfs(this.#db.renderModels, renderCB);
+      } catch (error) {
+        console.error(
+          "Render Engine encountered an error during DFS execution:",
+          error,
+        );
+      }
+
+      // Calculate how long the execution took
+      const executionTime = performance.now() - startTime;
+      // Calculate how much time is left to maintain 30 FPS
+      const remainingTime = Math.max(0, frameDuration - executionTime);
+
+      // Wait out the remaining time for this frame
+      await new Promise((resolve) => setTimeout(resolve, remainingTime));
     }
   }
 }

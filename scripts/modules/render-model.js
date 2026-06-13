@@ -23,12 +23,17 @@ import { Point } from "./point.js";
 
 export class RenderModel {
   #id;
-  #style;
+  #styleClass;
   #db;
+  #dynamic;
 
-  constructor(id, styleClass, db) {
+  constructor(id, dynamic, styleClass, db) {
     if (!Number.isFinite(id)) {
       throw new TypeError("Invalid type: id is not a number");
+    }
+
+    if (typeof dynamic !== "boolean") {
+      throw new TypeError("Invalid type: dynamic is not a boolean");
     }
 
     if (typeof styleClass !== "string" || styleClass.length === 0) {
@@ -44,24 +49,30 @@ export class RenderModel {
     }
 
     this.#id = id;
-    this.#style = new Style(styleClass);
+    this.#dynamic = dynamic;
+    this.#styleClass = styleClass;
     this.#db = db;
   }
 
   toString() {
-    return `${this.#id} ${this.#style.toString()}`;
+    return `${this.#id} ${this.#styleClass}`;
   }
 
   get id() {
     return this.#id;
   }
 
-  renderObject(parentSelector) {
-    if (typeof parentSelector !== "string") {
-      throw new TypeError(
-        "Invalid type: parameter parentSelector must be a valid CSS class selector String",
-      );
-    }
+  get styleClass() {
+    return this.#styleClass;
+  }
+
+  renderObject() {
+    const parentObject = this.#db.renderModels.getParentNode(
+      this.#styleClass,
+      null,
+    );
+
+    const parentSelector = `.${parentObject.name}`;
 
     const parentElement = document.querySelector(parentSelector);
     if (!parentElement) {
@@ -70,13 +81,16 @@ export class RenderModel {
       );
     }
 
-    const childElement = parentElement.querySelector(this.#style.styleClass);
+    const childElement = parentElement.querySelector(`.${this.#styleClass}`);
     if (childElement) {
       childElement.remove();
     }
 
     const element = document.createElement("div");
-    element.className = this.#style.styleClass;
+    element.className = this.#styleClass;
+
+    let point = null;
+    let currentObject = null;
 
     const collisionObj = this.#db.GetCollisionModel(this.#id);
     if (!collisionObj) {
@@ -85,12 +99,17 @@ export class RenderModel {
       );
     }
 
-    const point = collisionObj.center;
+    currentObject = collisionObj;
+    point = collisionObj.center;
 
     if (!point) {
       throw new Error(
-        `No position found for object with id ${this.#id}. Cannot render object.`,
+        `No position found for object with id ${this.#id}. Cannot render object. ${point}`,
       );
+    }
+
+    if (this.#styleClass == "player-ship") {
+      console.log(`${point.toString()}`);
     }
 
     element.style.left = `${point.x}px`;

@@ -19,28 +19,40 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '/
 
 abstract class Ship <<BaseClass>> {
+    #id: int
     #width: int
     #height: int
-    #point: Point
+    #center: Point
     #health: int
     # {abstract} style: Style
     --
     #Ship()
     .. General ..
     +toString() : String
-    +loadStyle() : boolean
     .. Movement ..
-    +moveRight() : void
-    +moveLeft() : void
-    +moveUp() : void
-    +moveDown() : void
+    +move()
     .. Getters / Setters ..
+    +getID() : int
     +getWidth() : int
     +getHeight() : int
-    +getPoint() : Point
+    +getCenter() : Point
     +getHealth() : int
     +setHealth() : void
-    +setPoint() : void
+}
+
+class EnemyShip extends Ship {
+    - listeners: List<OnMoveListener>
+    --
+    -EnemyShip()
+    -loadEnemyStyle() : boolean
+    .. General ..
+    + <<override>> toString() : String
+    .. Movement ..
+    + <<override>> moveRight() : void
+    + <<override>> moveLeft() : void
+    .. Event Listener ..
+    + addMoveListener(l: OnMoveListener): void
+    + removeMoveListener(l: OnMoveListener): void
 }
 
 class PlayerShip extends Ship {
@@ -50,23 +62,9 @@ class PlayerShip extends Ship {
     -loadPlayerStyle() : boolean
     .. General ..
     + <<override>> toString() : String
-    .. Movement ..
-    + <<override>> moveUp() : void
-    + <<override>> moveDown() : void
     .. Event Listener ..
     + addMoveListener(l: OnMoveListener): void
     + removeMoveListener(l: OnMoveListener): void
-}
-
-class EnemyShip extends Ship {
-    --
-    -EnemyShip()
-    -loadEnemyStyle() : boolean
-    .. General ..
-    + <<override>> toString() : String
-    .. Movement ..
-    + <<override>> moveRight() : void
-    + <<override>> moveLeft() : void
 }
 
 abstract class Gun <<BaseClass>> {

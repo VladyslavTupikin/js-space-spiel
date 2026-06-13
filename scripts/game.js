@@ -25,16 +25,17 @@ import { Point } from "./modules/point.js";
 import { CollisionModel } from "./modules/collision-model.js";
 import { Map } from "./modules/map.js";
 import { Stats } from "./modules/stats.js";
+import { TreeNode } from "./modules/tree-node.js";
+import { RenderEngine } from "./modules/render-engine.js";
 
 const db = new Database();
-const gameContainerSelector = ".game-container";
+
+const gameContainerSelector = "game-container";
 
 function main() {
   //console.log("Game started");
 
-  const player = new PlayerShip(50, 50, new Point(100, 100), 2);
-
-  db.AddPlayer(player);
+  const player = new PlayerShip(50, 50, new Point(250, 250), 2);
 
   const playerCollisionModel = new CollisionModel(
     player.id,
@@ -44,13 +45,9 @@ function main() {
 
   db.AddCollisionModel(playerCollisionModel);
 
-  const playerRenderModel = new RenderModel(player.id, "player-ship", db);
-
-  db.AddRenderModel(playerRenderModel);
+  const playerRenderModel = new RenderModel(player.id, true, "player-ship", db);
 
   const newMap = new Map(500, 500);
-
-  db.AddMap(newMap);
 
   const newMapCollisionModel = new CollisionModel(
     newMap.id,
@@ -60,13 +57,12 @@ function main() {
 
   db.AddCollisionModel(newMapCollisionModel);
 
-  const newMapRenderModel = new RenderModel(newMap.id, "map", db);
+  const newMapRenderModel = new RenderModel(newMap.id, false, "map", db);
 
   db.AddRenderModel(newMapRenderModel);
+  db.AddRenderModel(playerRenderModel, newMapRenderModel.styleClass);
 
   const stats = new Stats(200, 500);
-
-  db.AddStats(stats);
 
   const newStatsCollisionModel = new CollisionModel(
     stats.id,
@@ -76,15 +72,72 @@ function main() {
 
   db.AddCollisionModel(newStatsCollisionModel);
 
-  const newStatsRenderModel = new RenderModel(stats.id, "stats", db);
+  const newStatsRenderModel = new RenderModel(stats.id, false, "stats", db);
 
   db.AddRenderModel(newStatsRenderModel);
 
   /* Static render for test purposes */
 
-  newMapRenderModel.renderObject(gameContainerSelector);
-  playerRenderModel.renderObject(".map");
-  newStatsRenderModel.renderObject(gameContainerSelector);
+  //newMapRenderModel.renderObject();
+  //newStatsRenderModel.renderObject();
+  //playerRenderModel.renderObject();
+
+  const renderEngine = new RenderEngine(db);
+  renderEngine.startRenderEngine();
+
+  window.addEventListener("keydown", (event) => {
+    // Check if the pressed key is "a" or "A"
+    if (event.key === "a" || event.key === "A") {
+      console.log('The "A" key was pressed!');
+
+      // Call whatever action or function you want here
+      moveLeft();
+    } else if (event.key === "d" || event.key === "D") {
+      console.log('The "D" key was pressed!');
+
+      // Call whatever action or function you want here
+      moveRight();
+    } else if (event.key === "w" || event.key === "W") {
+      console.log('The "W" key was pressed!');
+
+      // Call whatever action or function you want here
+      moveUp();
+    } else if (event.key === "s" || event.key === "S") {
+      console.log('The "D" key was pressed!');
+
+      // Call whatever action or function you want here
+      moveDown();
+    }
+  });
+
+  const speed = 50;
+  function moveLeft() {
+    const pColMod = db.GetCollisionModel(player.id);
+    db.RemoveCollisionModel(pColMod.id);
+    pColMod.center.x = pColMod.center.x - speed;
+    db.AddCollisionModel(pColMod);
+  }
+
+  function moveRight() {
+    const pColMod = db.GetCollisionModel(player.id);
+    db.RemoveCollisionModel(pColMod.id);
+    pColMod.center.x = pColMod.center.x + speed;
+    db.AddCollisionModel(pColMod);
+  }
+
+  function moveUp() {
+    const pColMod = db.GetCollisionModel(player.id);
+    db.RemoveCollisionModel(pColMod.id);
+    pColMod.center.y = pColMod.center.y - speed;
+    db.AddCollisionModel(pColMod);
+  }
+
+  function moveDown() {
+    const pColMod = db.GetCollisionModel(player.id);
+    db.RemoveCollisionModel(pColMod.id);
+    pColMod.center.y = pColMod.center.y + speed;
+    db.AddCollisionModel(pColMod);
+  }
 }
 
 main();

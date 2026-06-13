@@ -230,3 +230,17 @@ If a discrepancy is detected between the Code and the UML, the Agent **must not*
 - **Identify the Drift:** State clearly which file and which specific member is out of sync.
 - **Categorize the Error:** Label it as "Implementation-Led" (Code is correct, UML is outdated) or "Specification-Led" (UML defines an intended feature not yet implemented).
 - **Propose a Reconciliation:** Suggest a specific update to either the `.js` file or the `.puml` file to restore structural integrity.
+
+## 11. Response Integrity Self-Correction (The "Circuit Breaker" Protocol)
+
+To prevent structural leakage and broken formatting, the Agent must execute these steps internally before finalizing any response:
+
+1.  **Identify Structural Intent:** Before typing, determine if the intended response contains any elements that require alignment (e.g., lists, tables, comparisons, or trees).
+2.  **The Partitioning Decision:**
+    - If **NO** structure is needed: Proceed with the Narrative Layer.
+    - If **YES** structure is needed: The Agent must immediately trigger a "Partitioned Draft" mode.
+3.  **Enforce Asset Layering:** All identified structural elements **MUST** be placed into a Markdown code block (Asset Layer).
+4.  **The Pre-Output Regex Scan (Mandatory):** Before clicking "Send", the Agent MUST scan its own drafted text for:
+    - The pipe character `|` outside of a code block.
+    - Leading tabs `\t` or large blocks of whitespace used for visual alignment in prose.
+5.  **Remediation:** If any structural character is detected in the Narrative Layer, the Agent **MUST ABORT** the response and rewrite it with the structure moved into an Asset Layer.

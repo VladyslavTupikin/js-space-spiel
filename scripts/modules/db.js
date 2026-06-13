@@ -23,15 +23,15 @@ import { RenderModel } from "./render-model.js";
 import { EnemyShip } from "./enemy-ship.js";
 import { Map } from "./map.js";
 import { Stats } from "./stats.js";
+import { TreeNode } from "./tree-node.js";
+
+const gameContainerClass = "game-container";
 
 export class Database {
   static #instance = null;
   #collisionModels;
   #renderModels;
-  #players;
-  #enemies;
-  #map;
-  #stats;
+  #gameObjects;
 
   constructor() {
     if (Database.#instance) {
@@ -40,9 +40,8 @@ export class Database {
 
     Database.#instance = this;
     this.#collisionModels = new Set();
-    this.#renderModels = new Set();
-    this.#players = new Set();
-    this.#enemies = new Set();
+    this.#renderModels = new TreeNode(gameContainerClass, undefined);
+    this.#gameObjects = new Set();
   }
 
   toString() {
@@ -63,47 +62,76 @@ export class Database {
 
   RemoveCollisionModel(id) {}
 
-  AddRenderModel(object) {
+  //   AddRenderModel(object) {
+  //     if (!(object instanceof RenderModel)) {
+  //       throw new TypeError(
+  //         "Invalid type: parameter object must be an instance of CollisionModel",
+  //       );
+  //     }
+
+  //     const node = new TreeNode(object.styleClass, object);
+  //     this.#renderModels.addChild(node);
+
+  //     return true;
+  //   }
+
+  AddRenderModel(object, parent) {
     if (!(object instanceof RenderModel)) {
       throw new TypeError(
         "Invalid type: parameter object must be an instance of CollisionModel",
       );
     }
 
-    this.#renderModels.add(object);
+    const node = new TreeNode(object.styleClass, object);
+
+    if (parent) {
+      const parentNode = this.#renderModels.getNode(parent);
+      parentNode.addChild(node);
+    } else {
+      this.#renderModels.addChild(node);
+    }
 
     return true;
   }
 
-  RemoveRenderModel(id) {}
+  RemoveRenderModel(id) {
+    if (!Number.isFinite(id)) {
+      throw new TypeError("Invalid type: parameter id is not a number");
+    }
 
-  AddPlayer(object) {
-    if (!(object instanceof PlayerShip)) {
+    for (const model of this.#collisionModels) {
+      if (model.id === id) {
+        this.#collisionModels.delete(model);
+      }
+    }
+
+    return null;
+  }
+
+  AddGameObject(object) {
+    if (typeof object !== "object") {
       throw new TypeError(
-        "Invalid type: parameter object must be an instance of PlayerShip",
+        "Invalid type: parameter object must be an object type",
       );
     }
 
-    this.#players.add(object);
-
+    this.#gameObjects.add(object);
     return true;
   }
 
-  RemovePlayer(id) {}
-
-  AddEnemy(object) {
-    if (!(object instanceof EnemyShip)) {
-      throw new TypeError(
-        "Invalid type: parameter object must be an instance of PlayerShip",
-      );
+  GetGameObject(id) {
+    if (!Number.isFinite(id)) {
+      throw new TypeError("Invalid type: parameter id is not a number");
     }
 
-    this.#enemies.add(object);
+    for (const gameObj of this.#gameObjects) {
+      if (gameObj.id === id) {
+        return gameObj;
+      }
+    }
 
-    return true;
+    return null;
   }
-
-  RemoveEnemy(id) {}
 
   GetCollisionModel(id) {
     if (!Number.isFinite(id)) {
@@ -119,39 +147,11 @@ export class Database {
     return null;
   }
 
-  GetRenderModel(id) {}
-
-  GetPlayer(id) {}
-
-  AddMap(map) {
-    if (!(map instanceof Map)) {
-      throw new TypeError(
-        "Invalid type: parameter map must be an instance of Map",
-      );
-    }
-
-    this.#map = map;
-
-    return true;
+  get collisionModels() {
+    return this.#collisionModels;
   }
 
-  AddStats(stats) {
-    if (!(stats instanceof Stats)) {
-      throw new TypeError(
-        "Invalid type: parameter stats must be an instance of Stats",
-      );
-    }
-
-    this.#stats = stats;
-
-    return true;
-  }
-
-  get map() {
-    return this.#map;
-  }
-
-  get stats() {
-    return this.#stats;
+  get renderModels() {
+    return this.#renderModels;
   }
 }

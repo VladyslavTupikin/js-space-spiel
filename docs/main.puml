@@ -23,15 +23,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 !include engine.puml
 !include events.puml
 
-/' Player Movement event dependencies '/
+/' Player Movement event dependencies '
 PlayerShip "1" o-- "*" OnMoveListener : manages >
+EnemyShip "1" o-- "*" OnMoveListener : manages >
 OnMoveListener .> PlayerMoveEvent : depends on / consumes >
-CollisionEngine .up.|> OnMoveListener : subscribes
+OnMoveListener .> EnemyMoveEvent : depends on / consumes >
+CollisionEngine .up.|> OnMoveListener : implements
 
 
-/' Player Movement Collision event dependencies '/
+/' Player Movement Collision event dependencies '
 CollisionEngine "1" o-- "*" OnCollisionListener : manages >
 OnCollisionListener .> CollisionEvent : depends on / consumes >
-Render .up.|> OnCollisionListener : subscribes
+/'Render .up.|> OnCollisionListener : subscribes'
+
+/' Player Movement Collision event dependencies '
+PistolGun "1" o-- "*" OnPistolGunFireListener : manages >
+OnPistolGunFireListener .> PistolGunFireEvent : depends on / consumes >
+CollisionEngine .up.|> OnPistolGunFireListener : subscribes
+'/
 
 @enduml
