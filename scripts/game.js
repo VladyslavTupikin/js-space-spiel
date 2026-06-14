@@ -35,7 +35,7 @@ const gameContainerSelector = "game-container";
 function main() {
   //console.log("Game started");
 
-  const player = new PlayerShip(50, 50, new Point(250, 250), 2);
+  const player = new PlayerShip(50, 50, new Point(300, 700), 2);
 
   const playerCollisionModel = new CollisionModel(
     player.id,

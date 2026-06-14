@@ -23,8 +23,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 500px;
+  width: 400px;
+  height: 800px;
   border: 3px solid rgb(0, 0, 0);
   border-left: none;
 }

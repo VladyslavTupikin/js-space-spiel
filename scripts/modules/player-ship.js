@@ -20,7 +20,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import { Ship } from "./ship.js";
 
 export class PlayerShip extends Ship {
-  //#listeners;
   static #healthMultiplier = 2;
 
   constructor(width, height, center, health) {
@@ -34,13 +33,4 @@ export class PlayerShip extends Ship {
   toString() {
     return super.toString();
   }
-
-  //   addMoveListener(OnMoveListener) {
-  //     this.#listeners.add(OnMoveListener);
-  //     return true;
-  //   }
-
-  //   removeoveListener(OnMoveListener) {
-  //     return this.#listeners.delete(OnMoveListener);
-  //   }
 }

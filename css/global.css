@@ -1,0 +1,29 @@
+/* Reset default browser settings */
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* outline: 1px solid red; */
+}
+
+:root {
+  --container-width: 1200px;
+}
+
+/* Default body configuration */
+body {
+  background-color: var(--body-bg-color);
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 16px;
+}

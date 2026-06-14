@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+@import url("./global.css");
 @import url("./styles/game-container.css");
 @import url("./styles/map.css");
 @import url("./styles/player-ship.css");
