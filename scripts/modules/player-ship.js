@@ -18,16 +18,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { Ship } from "./ship.js";
+import { Database } from "./db.js";
 
 export class PlayerShip extends Ship {
   static #healthMultiplier = 2;
+  #db;
+  #id;
 
-  constructor(width, height, center, health) {
+  constructor(db, width, height, center, health) {
+    if (!(db instanceof Database)) {
+      throw new TypeError(
+        "Invalid type: parameter db must be an instance of Database",
+      );
+    }
+
     const hp = health * PlayerShip.#healthMultiplier;
     const id = Math.floor(100000 + Math.random() * 900000);
+
     super(id, width, height, center, hp);
 
-    //this.#listeners = new Set();
+    this.#db = db;
+    this.#id = id;
   }
 
   toString() {

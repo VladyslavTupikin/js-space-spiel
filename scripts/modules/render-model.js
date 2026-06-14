@@ -27,7 +27,7 @@ export class RenderModel {
   #db;
   #dynamic;
 
-  constructor(id, dynamic, styleClass, db) {
+  constructor(db, id, dynamic, styleClass) {
     if (!Number.isFinite(id)) {
       throw new TypeError("Invalid type: id is not a number");
     }

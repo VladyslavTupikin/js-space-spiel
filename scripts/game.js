@@ -27,6 +27,7 @@ import { Map } from "./modules/map.js";
 import { Stats } from "./modules/stats.js";
 import { TreeNode } from "./modules/tree-node.js";
 import { RenderEngine } from "./modules/render-engine.js";
+import { InputManager } from "./modules/input-manager.js";
 
 const db = new Database();
 
@@ -35,7 +36,7 @@ const gameContainerSelector = "game-container";
 function main() {
   //console.log("Game started");
 
-  const player = new PlayerShip(50, 50, new Point(300, 700), 2);
+  const player = new PlayerShip(db, 50, 50, new Point(300, 700), 2);
 
   const playerCollisionModel = new CollisionModel(
     player.id,
@@ -45,7 +46,7 @@ function main() {
 
   db.AddCollisionModel(playerCollisionModel);
 
-  const playerRenderModel = new RenderModel(player.id, true, "player-ship", db);
+  const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
 
   const newMap = new Map(500, 500);
 
@@ -57,7 +58,7 @@ function main() {
 
   db.AddCollisionModel(newMapCollisionModel);
 
-  const newMapRenderModel = new RenderModel(newMap.id, false, "map", db);
+  const newMapRenderModel = new RenderModel(db, newMap.id, false, "map");
 
   db.AddRenderModel(newMapRenderModel);
   db.AddRenderModel(playerRenderModel, newMapRenderModel.styleClass);
@@ -72,72 +73,15 @@ function main() {
 
   db.AddCollisionModel(newStatsCollisionModel);
 
-  const newStatsRenderModel = new RenderModel(stats.id, false, "stats", db);
+  const newStatsRenderModel = new RenderModel(db, stats.id, false, "stats");
 
   db.AddRenderModel(newStatsRenderModel);
-
-  /* Static render for test purposes */
-
-  //newMapRenderModel.renderObject();
-  //newStatsRenderModel.renderObject();
-  //playerRenderModel.renderObject();
 
   const renderEngine = new RenderEngine(db);
   renderEngine.startRenderEngine();
 
-  window.addEventListener("keydown", (event) => {
-    // Check if the pressed key is "a" or "A"
-    if (event.key === "a" || event.key === "A") {
-      console.log('The "A" key was pressed!');
-
-      // Call whatever action or function you want here
-      moveLeft();
-    } else if (event.key === "d" || event.key === "D") {
-      console.log('The "D" key was pressed!');
-
-      // Call whatever action or function you want here
-      moveRight();
-    } else if (event.key === "w" || event.key === "W") {
-      console.log('The "W" key was pressed!');
-
-      // Call whatever action or function you want here
-      moveUp();
-    } else if (event.key === "s" || event.key === "S") {
-      console.log('The "D" key was pressed!');
-
-      // Call whatever action or function you want here
-      moveDown();
-    }
-  });
-
-  const speed = 50;
-  function moveLeft() {
-    const pColMod = db.GetCollisionModel(player.id);
-    db.RemoveCollisionModel(pColMod.id);
-    pColMod.center.x = pColMod.center.x - speed;
-    db.AddCollisionModel(pColMod);
-  }
-
-  function moveRight() {
-    const pColMod = db.GetCollisionModel(player.id);
-    db.RemoveCollisionModel(pColMod.id);
-    pColMod.center.x = pColMod.center.x + speed;
-    db.AddCollisionModel(pColMod);
-  }
-
-  function moveUp() {
-    const pColMod = db.GetCollisionModel(player.id);
-    db.RemoveCollisionModel(pColMod.id);
-    pColMod.center.y = pColMod.center.y - speed;
-    db.AddCollisionModel(pColMod);
-  }
-
-  function moveDown() {
-    const pColMod = db.GetCollisionModel(player.id);
-    db.RemoveCollisionModel(pColMod.id);
-    pColMod.center.y = pColMod.center.y + speed;
-    db.AddCollisionModel(pColMod);
-  }
+  const inputManager = new InputManager(db, player.id);
+  inputManager.InitMovement();
 }
 
 main();
