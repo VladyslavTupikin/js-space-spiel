@@ -135,59 +135,21 @@ The project is licensed under the **GNU General Public License v3 (GPLv3)**. Whe
 - **Consistency:** The license text in the file headers must match the terms found in the root `LICENSE` file.
 - **Integrity:** Do not remove existing copyright or license notices during refactoring.
 
-## 8. Output Formatting Standards (REVISED: Container-First Architecture)
+## 8. Output Formatting Standards
 
-The Agent's output is strictly divided into two mutually exclusive layers. To prevent structural leakage, the Agent must use a "Container-First" approach: decide the layer _before_ drafting the content.
+To ensure compatibility with the IDE interface and prevent markdown parsing bugs, the Agent must cleanly split responses into two layers:
 
-### Layer 1: The Narrative Layer (Plain Text)
+### 8.1 The Narrative Layer (Conversational Text)
 
-- **Purpose:** Reasoning, technical explanation, bug analysis, and conversational dialogue.
-- **Constraint:** This layer contains ONLY human-readable prose (sentences, paragraphs).
-- **Prohibition:** It is **strictly forbidden** to use this layer for any data that requires vertical or horizontal alignment (e.g., tables, lists of findings, or file structures).
+- Used for explanations, reasoning, and dialogue.
+- Use standard paragraphs and standard Markdown bullet points (`-`) for simple lists.
+- NEVER use raw Markdown tables or ASCII trees here.
 
-### Layer 2: The Asset Layer (Encapsulated Containers)
+### 8.2 The Asset Layer (Code & Structural Blocks)
 
-- **Purpose:** The delivery of all "Structured Data" and "Technical Findings."
-- **Definition of an Asset:** Any content that relies on structural alignment, indentation, or specific delimiters to be readable.
-- **Mandatory Asset Types (Must be wrapped in code blocks):**
-  1. **Markdown Tables** (Audit results, comparison tables, feature lists).
-  2. **Directory/File Trees** (Output from `ls`, `tree`, or `find`).
-  3. **Structured Data** (JSON, CSV, XML, or configuration snapshots).
-  4. **Complex Log Trate/Terminal Output** (Stack traces, error logs).
-  5. **Structural Lists** (Lists of findings, checklists, or step-by-step instructions).
-- **Strict Requirement:** All items in this layer **must** be encapsulated within a Markdown code block (e.g., ` ```markdown `, ` ```text `, or ` ```json `).
-
-### The "Zero-Leakage" Protocol (Mandatory Self-Audit)
-
-Before finalizing any response, the Agent must perform a **Structural Integrity Check**:
-
-1. **Identify:** Scan the entire response for "Structural Triggers" (pipes `|`, tabs `\t`, or leading indentation in lists).
-2. **Verify:** For every "Trigger" found, verify it is enclosed within a ` ``` ` block.
-3. **Remediate:** If a structural element is found in the **Narrative Layer**, the Agent must rewrite the response to move that element into the **Asset Layer** before outputting.
-
-### 8.1 Layer Assignment Mandate
-
-Before generating any character of the response, the Agent must execute a "Layer Partitioning" step:
-
-1.  **Identify Structural Intent:** If the planned response contains any element that uses vertical alignment, columns, or delimiters (e.g., a comparison, a list of metrics, or a breakdown of findings), the Agent must explicitly categorize this as "ASSET LAYER".
-
-2.  **Enforce Containerization:** Once an element is categorized as "ASSET LAYER", the Agent is strictly prohibited from writing it directly into the text stream.
-
-3.  **The "Zero-Leakage" Rule:** Any use of the characters `|`, `\t`, or leading indentation for the purpose of alignment/structure _outside_ of a ` ``` ` block is a violation of this protocol.
-
-4.  **CRITICAL: The "Circuit Breaker" Rule:** If, during the drafting of the Narrative Layer, the Agent detects a structural trigger (like a `|`) being typed, the Agent **MUST NOT** attempt to "fix" the sentence within the same draft. The Agent **MUST** immediately trigger the **Self-Correction Protocol**:
-    - **ABORT** the current draft.
-    - **RESTART** the response from the beginning.
-    - **RE-ALLOCATE** the identified structure to the **Asset Layer** (Code Block) before drafting the Narrative.
-
-### 8.2 Asset Layer Integrity Protocol
-
-To ensure the accuracy of structured data (Tables, Trees, Lists) within the Asset Layer, the Agent must:
-
-1.  **Source-of-Truth Verification:** Before finalizing any table or list, the Agent must cross-reference every identifier (e.g., filenames, variable names, class names) against the actual source code or file system output used during the analysis.
-2.  **Typo Prevention (Zero Tolerance):** The Agent must perform a final "Scan-for-Typos" on all text within code blocks. A typo in an Asset Layer (e.g., `team-lagner.js` instead of `team-manager.js`) is considered a failure of Engineering Correctness.
-3.  **Identifier Consistency:** All identifiers in the Asset Layer must exactly match the casing and naming conventions used in the actual codebase.
-4.  **Mandatory Self-Correction:** If the Agent detects a mismatch between its drafted Asset Layer and the technical reality of the codebase, it must abort the response and rewrite the Asset Layer.
+- Every single code snippet, refactor proposal, directory tree, or markdown table MUST be encapsulated inside a standard Markdown code block specifying the language (e.g., `javascript, `css, `markdown, or `text).
+- Never nest markdown code blocks inside other code blocks.
+- Ensure all code snippets are clean, syntactically complete, and include the standard language delimiter so the IDE extension can parse and inject the code correctly.
 
 ## 9. Project-Specific Constraints
 
@@ -230,17 +192,3 @@ If a discrepancy is detected between the Code and the UML, the Agent **must not*
 - **Identify the Drift:** State clearly which file and which specific member is out of sync.
 - **Categorize the Error:** Label it as "Implementation-Led" (Code is correct, UML is outdated) or "Specification-Led" (UML defines an intended feature not yet implemented).
 - **Propose a Reconciliation:** Suggest a specific update to either the `.js` file or the `.puml` file to restore structural integrity.
-
-## 11. Response Integrity Self-Correction (The "Circuit Breaker" Protocol)
-
-To prevent structural leakage and broken formatting, the Agent must execute these steps internally before finalizing any response:
-
-1.  **Identify Structural Intent:** Before typing, determine if the intended response contains any elements that require alignment (e.g., lists, tables, comparisons, or trees).
-2.  **The Partitioning Decision:**
-    - If **NO** structure is needed: Proceed with the Narrative Layer.
-    - If **YES** structure is needed: The Agent must immediately trigger a "Partitioned Draft" mode.
-3.  **Enforce Asset Layering:** All identified structural elements **MUST** be placed into a Markdown code block (Asset Layer).
-4.  **The Pre-Output Regex Scan (Mandatory):** Before clicking "Send", the Agent MUST scan its own drafted text for:
-    - The pipe character `|` outside of a code block.
-    - Leading tabs `\t` or large blocks of whitespace used for visual alignment in prose.
-5.  **Remediation:** If any structural character is detected in the Narrative Layer, the Agent **MUST ABORT** the response and rewrite it with the structure moved into an Asset Layer.
