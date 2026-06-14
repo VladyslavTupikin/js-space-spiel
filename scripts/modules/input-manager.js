@@ -44,38 +44,25 @@ export class InputManager {
 
   InitMovement() {
     window.addEventListener("keydown", (event) => {
-      // Check if the pressed key is "a" or "A"
       if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
-        console.log('The "A" key was pressed!');
-
-        // Call whatever action or function you want here
         moveLeft(this.#db, this.#playerID);
       } else if (
         event.key === "d" ||
         event.key === "D" ||
         event.key === "ArrowRight"
       ) {
-        console.log('The "D" key was pressed!');
-
-        // Call whatever action or function you want here
         moveRight(this.#db, this.#playerID);
       } else if (
         event.key === "w" ||
         event.key === "W" ||
         event.key === "ArrowUp"
       ) {
-        console.log('The "W" key was pressed!');
-
-        // Call whatever action or function you want here
         moveUp(this.#db, this.#playerID);
       } else if (
         event.key === "s" ||
         event.key === "S" ||
         event.key === "ArrowDown"
       ) {
-        console.log('The "S" key was pressed!');
-
-        // Call whatever action or function you want here
         moveDown(this.#db, this.#playerID);
       }
     });
@@ -84,30 +71,39 @@ export class InputManager {
 
     function moveLeft(db, id) {
       const pColMod = db.GetCollisionModel(id);
-      db.RemoveCollisionModel(pColMod.id);
-      pColMod.center.x = pColMod.center.x - speed;
-      db.AddCollisionModel(pColMod);
+
+      const newX = Number(pColMod.center.x - speed);
+
+      if (pColMod.center.x > 0) {
+        pColMod.center.x = newX;
+      }
     }
 
     function moveRight(db, id) {
       const pColMod = db.GetCollisionModel(id);
-      db.RemoveCollisionModel(pColMod.id);
-      pColMod.center.x = pColMod.center.x + speed;
-      db.AddCollisionModel(pColMod);
+
+      const newX = pColMod.center.x + speed;
+      if (pColMod.center.x < 600) {
+        pColMod.center.x = newX;
+      }
     }
 
     function moveUp(db, id) {
       const pColMod = db.GetCollisionModel(id);
-      db.RemoveCollisionModel(pColMod.id);
-      pColMod.center.y = pColMod.center.y - speed;
-      db.AddCollisionModel(pColMod);
+
+      const newY = pColMod.center.y - speed;
+      if (pColMod.center.y > 0) {
+        pColMod.center.y = newY;
+      }
     }
 
     function moveDown(db, id) {
       const pColMod = db.GetCollisionModel(id);
-      db.RemoveCollisionModel(pColMod.id);
-      pColMod.center.y = pColMod.center.y + speed;
-      db.AddCollisionModel(pColMod);
+
+      const newY = pColMod.center.y + speed;
+      if (pColMod.center.y < 750) {
+        pColMod.center.y = newY;
+      }
     }
   }
 }

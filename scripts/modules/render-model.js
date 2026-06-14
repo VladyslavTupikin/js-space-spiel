@@ -108,9 +108,10 @@ export class RenderModel {
       );
     }
 
-    if (this.#styleClass == "player-ship") {
-      console.log(`${point.toString()}`);
-    }
+    // Object center point prints, debug only!!!
+    // if (this.#styleClass == "player-ship") {
+    //   console.log(`${point.toString()}`);
+    // }
 
     element.style.left = `${point.x}px`;
     element.style.top = `${point.y}px`;
