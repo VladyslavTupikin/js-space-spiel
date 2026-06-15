@@ -28,6 +28,7 @@ import { Stats } from "./modules/stats.js";
 import { TreeNode } from "./modules/tree-node.js";
 import { RenderEngine } from "./modules/render-engine.js";
 import { InputManager } from "./modules/input-manager.js";
+import { EnemyShip } from "./modules/enemy-ship.js";
 
 const db = new Database();
 
@@ -36,46 +37,65 @@ const gameContainerSelector = "game-container";
 function main() {
   //console.log("Game started");
 
-  const player = new PlayerShip(db, 50, 50, new Point(300, 700), 2);
-
-  const playerCollisionModel = new CollisionModel(
-    player.id,
-    Math.max(player.width, player.height) / 2,
-    player.getCurrentPosition(),
-  );
-
-  db.AddCollisionModel(playerCollisionModel);
-
-  const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
-
-  const newMap = new Map(500, 500);
-
+  /*-- Map -- */
+  const newMap = new Map(650, 800);
   const newMapCollisionModel = new CollisionModel(
     newMap.id,
     Math.max(newMap.width, newMap.height) / 2,
     new Point(0, 0),
   );
-
-  db.AddCollisionModel(newMapCollisionModel);
-
   const newMapRenderModel = new RenderModel(db, newMap.id, false, "map");
 
-  db.AddRenderModel(newMapRenderModel);
-  db.AddRenderModel(playerRenderModel, newMapRenderModel.styleClass);
+  db.AddObjects(newMap, newMapCollisionModel, newMapRenderModel);
 
+  /*-- Player -- */
+  const player = new PlayerShip(db, 50, 50, new Point(300, 700), 2);
+  const playerCollisionModel = new CollisionModel(
+    player.id,
+    Math.max(player.width, player.height) / 2,
+    player.getCurrentPosition(),
+  );
+  const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
+
+  db.AddObjects(
+    player,
+    playerCollisionModel,
+    playerRenderModel,
+    newMapRenderModel.styleClass,
+  );
+
+  /*-- Statistics -- */
   const stats = new Stats(200, 500);
-
   const newStatsCollisionModel = new CollisionModel(
     stats.id,
     Math.max(stats.width, stats.height) / 2,
     new Point(0, 0),
   );
-
-  db.AddCollisionModel(newStatsCollisionModel);
-
   const newStatsRenderModel = new RenderModel(db, stats.id, false, "stats");
 
-  db.AddRenderModel(newStatsRenderModel);
+  db.AddObjects(stats, newStatsCollisionModel, newStatsRenderModel);
+
+  /*-- Enemy -- */
+  const enemy = new EnemyShip(db, 50, 50, new Point(300, 0), 1);
+  const enemyCollisionModel = new CollisionModel(
+    enemy.id,
+    Math.max(player.width, player.height) / 2,
+    enemy.getCurrentPosition(),
+  );
+  const enemyRenderModel = new RenderModel(db, enemy.id, true, "enemy-ship");
+
+  db.AddObjects(
+    enemy,
+    enemyCollisionModel,
+    enemyRenderModel,
+    newMapRenderModel.styleClass,
+  );
+
+  /* Static render for debug puproses */
+  //   newMapRenderModel.renderObject();
+  //   playerRenderModel.renderObject();
+  //   newStatsRenderModel.renderObject();
+  //   enemyRenderModel.renderObject();
 
   const renderEngine = new RenderEngine(db);
   renderEngine.startRenderEngine();

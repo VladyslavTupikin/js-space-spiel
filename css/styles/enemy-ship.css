@@ -1,5 +1,5 @@
 /*
-enemy-ship.js: Module describes enemy ship as extension of Ship class.
+enemy-ship.css: Style CSS file for the Enemy Ships.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,31 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Ship } from "./ship.js";
-import { Database } from "./db.js";
-
-export class EnemyShip extends Ship {
-  //#listeners;
-  static #healthMultiplier = 1;
-  #id;
-  #db;
-
-  constructor(db, width, height, center, health) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
-    const hp = health * EnemyShip.#healthMultiplier;
-    const id = 1 + Math.random() * 10;
-    super(id, width, height, center, hp);
-
-    this.#db = db;
-    this.#id = id;
-  }
-
-  toString() {
-    return `super.toString()`;
-  }
+.enemy-ship {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: solid 1px green;
+  background-color: rgb(255, 255, 0);
 }

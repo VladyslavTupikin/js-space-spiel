@@ -32,6 +32,7 @@ export class Database {
   #collisionModels;
   #renderModels;
   #gameObjects;
+  #limiterFPS = 30;
 
   constructor() {
     if (Database.#instance) {
@@ -46,6 +47,16 @@ export class Database {
 
   toString() {
     return ``;
+  }
+
+  AddObjects(game, collision, render, renderParent) {
+    try {
+      this.AddGameObject(game);
+      this.AddCollisionModel(collision);
+      this.AddRenderModel(render, renderParent);
+    } catch (error) {
+      throw new Error(`Database: failed to add objects: ${error}`);
+    }
   }
 
   AddCollisionModel(object) {
@@ -153,5 +164,13 @@ export class Database {
 
   get renderModels() {
     return this.#renderModels;
+  }
+
+  get gameObjects() {
+    return this.#gameObjects;
+  }
+
+  get limiterFPS() {
+    return this.#limiterFPS;
   }
 }

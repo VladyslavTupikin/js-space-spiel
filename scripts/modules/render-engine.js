@@ -57,7 +57,7 @@ export class RenderEngine {
     if (this.#isRendering) return; // Prevent multiple loops from running simultaneously
     this.#isRendering = true;
 
-    const targetFPS = 30;
+    const targetFPS = this.#db.limiterFPS;
     const frameDuration = 1000 / targetFPS; // ~33.33ms
 
     const renderCB = (node) => {
