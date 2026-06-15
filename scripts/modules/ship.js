@@ -89,7 +89,7 @@ export class Ship {
     this.#health = value;
   }
 
-  getCurrentPosition() {
+  get center() {
     return this.#center;
   }
 

@@ -51,9 +51,15 @@ export class Database {
 
   AddObjects(game, collision, render, renderParent) {
     try {
-      this.AddGameObject(game);
-      this.AddCollisionModel(collision);
-      this.AddRenderModel(render, renderParent);
+      if (game) {
+        this.AddGameObject(game);
+      }
+      if (collision) {
+        this.AddCollisionModel(collision);
+      }
+      if (render) {
+        this.AddRenderModel(render, renderParent);
+      }
     } catch (error) {
       throw new Error(`Database: failed to add objects: ${error}`);
     }
@@ -144,6 +150,22 @@ export class Database {
     return null;
   }
 
+  GetGameObjectByName(styleClass) {
+    if (typeof styleClass !== "string" || styleClass.length === 0) {
+      throw new TypeError(
+        "Invalid type: parameter styleClass is not a valid HTML class",
+      );
+    }
+
+    for (const model of this.#renderModels) {
+      if (model.styleClass === styleClass) {
+        return model;
+      }
+    }
+
+    return null;
+  }
+
   GetCollisionModel(id) {
     if (!Number.isFinite(id)) {
       throw new TypeError("Invalid type: parameter id is not a number");
@@ -156,6 +178,10 @@ export class Database {
     }
 
     return null;
+  }
+
+  GenerateID() {
+    return Math.floor(100000 + Math.random() * 900000);
   }
 
   get collisionModels() {

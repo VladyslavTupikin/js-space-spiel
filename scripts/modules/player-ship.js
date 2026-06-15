@@ -33,7 +33,7 @@ export class PlayerShip extends Ship {
     }
 
     const hp = health * PlayerShip.#healthMultiplier;
-    const id = Math.floor(100000 + Math.random() * 900000);
+    const id = db.GenerateID();
 
     super(id, width, height, center, hp);
 

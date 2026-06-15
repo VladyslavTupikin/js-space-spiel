@@ -38,11 +38,11 @@ function main() {
   //console.log("Game started");
 
   /*-- Map -- */
-  const newMap = new Map(650, 800);
+  const newMap = new Map(db, 650, 800, new Point(0, 0));
   const newMapCollisionModel = new CollisionModel(
     newMap.id,
     Math.max(newMap.width, newMap.height) / 2,
-    new Point(0, 0),
+    newMap.center,
   );
   const newMapRenderModel = new RenderModel(db, newMap.id, false, "map");
 
@@ -53,7 +53,7 @@ function main() {
   const playerCollisionModel = new CollisionModel(
     player.id,
     Math.max(player.width, player.height) / 2,
-    player.getCurrentPosition(),
+    player.center,
   );
   const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
 
@@ -65,22 +65,16 @@ function main() {
   );
 
   /*-- Statistics -- */
-  const stats = new Stats(200, 500);
-  const newStatsCollisionModel = new CollisionModel(
-    stats.id,
-    Math.max(stats.width, stats.height) / 2,
-    new Point(0, 0),
-  );
+  const stats = new Stats(db, 200, 500, new Point(0, 0));
   const newStatsRenderModel = new RenderModel(db, stats.id, false, "stats");
-
-  db.AddObjects(stats, newStatsCollisionModel, newStatsRenderModel);
+  db.AddObjects(stats, null, newStatsRenderModel);
 
   /*-- Enemy -- */
   const enemy = new EnemyShip(db, 50, 50, new Point(300, 0), 1);
   const enemyCollisionModel = new CollisionModel(
     enemy.id,
     Math.max(player.width, player.height) / 2,
-    enemy.getCurrentPosition(),
+    enemy.center,
   );
   const enemyRenderModel = new RenderModel(db, enemy.id, true, "enemy-ship");
 
@@ -91,12 +85,16 @@ function main() {
     newMapRenderModel.styleClass,
   );
 
+  //   for (const obj of db.gameObjects) {
+  //     console.log(obj);
+  //   }
   /* Static render for debug puproses */
   //   newMapRenderModel.renderObject();
   //   playerRenderModel.renderObject();
   //   newStatsRenderModel.renderObject();
   //   enemyRenderModel.renderObject();
 
+  //console.log(db.GetGameObject(newMapRenderModel.id));
   const renderEngine = new RenderEngine(db);
   renderEngine.startRenderEngine();
 

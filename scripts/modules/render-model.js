@@ -92,15 +92,15 @@ export class RenderModel {
     let point = null;
     let currentObject = null;
 
-    const collisionObj = this.#db.GetCollisionModel(this.#id);
-    if (!collisionObj) {
+    const gameObj = this.#db.GetGameObject(this.#id);
+    if (!gameObj) {
       throw new Error(
-        `No collision model found for object with id ${this.#id}. Cannot render object.`,
+        `No game object found for object with id ${this.#id}. Cannot render object.`,
       );
     }
 
-    currentObject = collisionObj;
-    point = collisionObj.center;
+    currentObject = gameObj;
+    point = gameObj.center;
 
     if (!point) {
       throw new Error(

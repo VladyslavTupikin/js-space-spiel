@@ -17,14 +17,31 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Database } from "./db.js";
+import { Point } from "./point.js";
+
 export class Map {
   static #instance = null;
   #id;
   #width;
   #height;
   #measureUnit = "px";
+  #db;
+  #center;
 
-  constructor(width = 600, height = 800) {
+  constructor(db, width = 600, height = 800, center) {
+    if (!(db instanceof Database)) {
+      throw new TypeError(
+        "Invalid type: parameter db must be an instance of Database",
+      );
+    }
+
+    if (!(center instanceof Point)) {
+      throw new TypeError(
+        "Invalid type: parameter point must be an instance of Point",
+      );
+    }
+
     if (Map.#instance) {
       return Map.#instance;
     }
@@ -35,9 +52,11 @@ export class Map {
       );
     }
 
-    this.#id = Math.floor(100000 + Math.random() * 900000);
+    this.#id = db.GenerateID();
     this.#width = width;
     this.#height = height;
+    this.#db = db;
+    this.#center = center;
     Map.#instance = this;
   }
 
@@ -73,5 +92,9 @@ export class Map {
 
   get id() {
     return this.#id;
+  }
+
+  get center() {
+    return this.#center;
   }
 }
