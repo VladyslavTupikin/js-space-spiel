@@ -41,7 +41,7 @@ export class Database {
 
     Database.#instance = this;
     this.#collisionModels = new Set();
-    this.#renderModels = new TreeNode(gameContainerClass, undefined);
+    this.#renderModels = new TreeNode(0, gameContainerClass, undefined);
     this.#gameObjects = new Set();
   }
 
@@ -99,7 +99,7 @@ export class Database {
       );
     }
 
-    const node = new TreeNode(object.styleClass, object);
+    const node = new TreeNode(object.id, object.styleClass, object);
 
     if (parent) {
       const parentNode = this.#renderModels.getNode(parent);
@@ -157,13 +157,14 @@ export class Database {
       );
     }
 
-    for (const model of this.#renderModels) {
-      if (model.styleClass === styleClass) {
-        return model;
-      }
+    const renderNode = this.#renderModels.getNode(styleClass);
+    if (!renderNode) {
+      throw new Error(
+        `Failed to find render node for given name ${styleClass}`,
+      );
     }
 
-    return null;
+    return this.GetGameObject(renderNode.id);
   }
 
   GetCollisionModel(id) {
@@ -178,6 +179,10 @@ export class Database {
     }
 
     return null;
+  }
+
+  GetRenderModel(id) {
+    return this.#renderModels.getNodeByID(id);
   }
 
   GenerateID() {

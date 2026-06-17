@@ -18,15 +18,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 export class TreeNode {
+  #id;
   #name;
   #object;
   #children;
 
-  constructor(name, object) {
+  constructor(id, name, object) {
     if (typeof name !== "string") {
       throw new TypeError("Invalid type: name must be a string");
     }
 
+    if (!Number.isFinite(id)) {
+      throw new TypeError("Invalid type: parameter id is not a number");
+    }
+
+    this.#id = id;
     this.#name = name;
     this.#children = [];
     this.#object = object;
@@ -88,6 +94,25 @@ export class TreeNode {
     return null;
   }
 
+  getNodeByID(id) {
+    if (!Number.isFinite(id)) {
+      throw new TypeError("Invalid type: parameter id is not a number");
+    }
+
+    if (id === this.id) {
+      return this;
+    }
+
+    for (const child of this.children) {
+      const found = child.getNodeByID(id);
+      if (found) {
+        return found;
+      }
+    }
+
+    return null;
+  }
+
   get children() {
     return this.#children;
   }
@@ -98,5 +123,9 @@ export class TreeNode {
 
   get object() {
     return this.#object;
+  }
+
+  get id() {
+    return this.#id;
   }
 }
