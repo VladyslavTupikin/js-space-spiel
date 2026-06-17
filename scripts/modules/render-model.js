@@ -26,6 +26,7 @@ export class RenderModel {
   #styleClass;
   #db;
   #dynamic;
+  #isVisible;
 
   constructor(db, id, dynamic, styleClass) {
     if (!Number.isFinite(id)) {
@@ -52,6 +53,7 @@ export class RenderModel {
     this.#dynamic = dynamic;
     this.#styleClass = styleClass;
     this.#db = db;
+    this.#isVisible = true;
   }
 
   toString() {
@@ -66,7 +68,23 @@ export class RenderModel {
     return this.#styleClass;
   }
 
+  get isVisible() {
+    return this.#isVisible;
+  }
+
+  set isVisible(value) {
+    if (typeof value !== "boolean") {
+      throw new TypeError("Invalid type: visible value must be boolean");
+    }
+    this.#isVisible = value;
+  }
+
   renderObject() {
+    if (this.#isVisible !== true) {
+      console.debug(`Object ${this.#id} is visible: ${this.#isVisible}`);
+      return;
+    }
+
     const parentObject = this.#db.renderModels.getParentNode(
       this.#styleClass,
       null,
@@ -109,9 +127,9 @@ export class RenderModel {
     }
 
     // Object center point prints, debug only!!!
-    // if (this.#styleClass == "player-ship") {
-    //   console.log(`${point.toString()}`);
-    // }
+    if (this.#styleClass == "player-ship") {
+      console.log(`${point.toString()}`);
+    }
 
     element.style.left = `${point.x}px`;
     element.style.top = `${point.y}px`;
