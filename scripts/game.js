@@ -17,18 +17,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* General types */
 import { Database } from "./modules/db.js";
-import { PlayerShip } from "./modules/player-ship.js";
-import { Style } from "./modules/style.js";
-import { RenderModel } from "./modules/render-model.js";
+import { TreeNode } from "./modules/tree-node.js";
 import { Point } from "./modules/point.js";
-import { CollisionModel } from "./modules/collision-model.js";
+
+/* Game board */
 import { Map } from "./modules/map.js";
 import { Stats } from "./modules/stats.js";
-import { TreeNode } from "./modules/tree-node.js";
-import { RenderEngine } from "./modules/render-engine.js";
-import { InputManager } from "./modules/input-manager.js";
+
+/* Map objects */
+import { PlayerShip } from "./modules/player-ship.js";
 import { EnemyShip } from "./modules/enemy-ship.js";
+
+/* Engines */
+import { RenderModel } from "./modules/render-model.js";
+import { RenderEngine } from "./modules/render-engine.js";
+import { CollisionModel } from "./modules/collision-model.js";
+import { CollisionEngine } from "./modules/collision-engine.js";
+
+/* Event handlers */
+import { InputManager } from "./modules/input-manager.js";
+
+/* Unused */
+import { Style } from "./modules/style.js";
 
 const db = new Database();
 
@@ -53,7 +65,7 @@ function main() {
   const playerCollisionModel = new CollisionModel(
     player.id,
     Math.max(player.width, player.height) / 2,
-    player.center,
+    new Point(player.center.x, player.center.y),
   );
   const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
 
