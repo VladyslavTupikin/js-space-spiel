@@ -112,6 +112,9 @@ function main() {
 
   const inputManager = new InputManager(db, player.id);
   inputManager.InitMovement();
+
+  const collisionEngine = new CollisionEngine(db);
+  collisionEngine.startCollisionEngine();
 }
 
 main();
