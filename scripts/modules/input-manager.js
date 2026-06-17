@@ -74,36 +74,31 @@ export class InputManager {
 
       const newX = Number(pColMod.center.x - speed);
 
-      if (pColMod.center.x > 0) {
-        pColMod.center.x = newX;
-      }
+      pColMod.center.x = newX;
     }
 
     function moveRight(db, id) {
       const pColMod = db.GetCollisionModel(id);
 
       const newX = pColMod.center.x + speed;
-      if (pColMod.center.x < 600) {
-        pColMod.center.x = newX;
-      }
+
+      pColMod.center.x = newX;
     }
 
     function moveUp(db, id) {
       const pColMod = db.GetCollisionModel(id);
 
       const newY = pColMod.center.y - speed;
-      if (pColMod.center.y > 0) {
-        pColMod.center.y = newY;
-      }
+
+      pColMod.center.y = newY;
     }
 
     function moveDown(db, id) {
       const pColMod = db.GetCollisionModel(id);
 
       const newY = pColMod.center.y + speed;
-      if (pColMod.center.y < 750) {
-        pColMod.center.y = newY;
-      }
+
+      pColMod.center.y = newY;
     }
   }
 }
