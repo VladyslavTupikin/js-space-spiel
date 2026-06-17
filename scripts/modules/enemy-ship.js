@@ -34,7 +34,7 @@ export class EnemyShip extends Ship {
     }
 
     const hp = health * EnemyShip.#healthMultiplier;
-    const id = 1 + Math.random() * 10;
+    const id = db.GenerateID();
     super(id, width, height, center, hp);
 
     this.#db = db;
