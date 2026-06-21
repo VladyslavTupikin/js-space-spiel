@@ -18,43 +18,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { Point } from "../engine/point.js";
+import { GameObject } from "../engine/game-object.js";
 
-export class Gun {
-  #id;
+export class Gun extends GameObject {
   #ammo;
-  #center;
   #durability;
 
-  constructor(id, ammo, center, durability = -1) {
-    if (![id, ammo].every((p) => Number.isFinite(p))) {
-      throw new TypeError("Invalid type: id/ammo is not a number");
+  constructor(db, center, ammo = 1, durability = -1) {
+    super(db, center);
+
+    if (![ammo, durability].every((p) => Number.isFinite(p))) {
+      throw new TypeError("Invalid type: ammo/durability is not a number");
     }
 
-    if (!(center instanceof Point)) {
-      throw new TypeError(
-        "Invalid type: parameter point must be an instance of Point",
-      );
-    }
-
-    this.#id = id;
     this.#ammo = ammo;
-    this.#center = center;
     this.#durability = durability; // Default - Indestructible
   }
 
   toString() {
-    return `${this.#id} ${this.#ammo}`;
+    return super.toString() + `${this.#ammo} ${this.#durability}`;
   }
 
   fire() {}
-
-  get id() {
-    return this.#id;
-  }
-
-  get center() {
-    return this.#center;
-  }
 
   get ammo() {
     return this.#ammo;

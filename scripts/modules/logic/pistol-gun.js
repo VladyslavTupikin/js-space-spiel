@@ -23,35 +23,20 @@ import { Database } from "../engine/db.js";
 import { Animation } from "../engine/animation.js";
 
 export class PistolGun extends Gun {
-  #db;
-
-  constructor(db, ammo, position, durability) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
-    const id = db.GenerateID();
-    super(id, ammo, position, durability);
-
-    this.#db = db;
-  }
-
-  get db() {
-    return this.#db;
+  constructor(db, position, ammo, durability) {
+    super(db, position, ammo, durability);
   }
 
   async fire(playerID) {
     const targetFps = 30;
     const frameDuration = 1000 / targetFps; // ~33.33ms
 
-    const renderNode = this.#db.GetRenderModel(this.id);
+    const renderNode = this.db.GetRenderModel(this.id);
     if (!renderNode) {
       throw new Error("Gun render not found!");
     }
 
-    const playerObject = this.#db.GetGameObject(playerID);
+    const playerObject = this.db.GetGameObject(playerID);
     this.center.y = playerObject.center.y;
     this.center.x = playerObject.center.x;
 
@@ -70,7 +55,7 @@ export class PistolGun extends Gun {
       }
     };
 
-    const animation = new Animation(this.#db);
+    const animation = new Animation(this.db);
     animation.Animate(animationCB);
   }
 }

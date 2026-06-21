@@ -97,7 +97,7 @@ function main() {
   );
 
   /* Player weapon */
-  const pistol = new PistolGun(db, 100, player.center, -1);
+  const pistol = new PistolGun(db, player.center, 100, -1);
   player.gunID = pistol.id;
 
   const pistolCollisionModel = new CollisionModel(
