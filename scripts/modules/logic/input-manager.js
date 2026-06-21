@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Database } from "./db.js";
+import { Database } from "../engine/db.js";
 
 export class InputManager {
   #db;
@@ -40,6 +40,23 @@ export class InputManager {
 
   toString() {
     return ``;
+  }
+
+  startInputManager() {
+    this.InitMovement();
+    this.InitGunFire();
+  }
+
+  InitGunFire() {
+    window.addEventListener("keydown", (event) => {
+      if (event.key === " " || event.key === "Spacebar") {
+        console.log(`space: FIRE!!!`);
+
+        const player = this.#db.GetGameObject(this.#playerID);
+        const gun = this.#db.GetGameObject(player.gunID);
+        gun.fire(this.#playerID);
+      }
+    });
   }
 
   InitMovement() {

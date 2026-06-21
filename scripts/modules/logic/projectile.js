@@ -1,5 +1,5 @@
 /*
-index.css: Main CSS file connected to the HTML page.
+projectile.js: Module describes Gun Projectile class.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -16,11 +16,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-@import url("./global.css");
-@import url("./styles/game-container.css");
-@import url("./styles/map.css");
-@import url("./styles/player-ship.css");
-@import url("./styles/stats.css");
-@import url("./styles/enemy-ship.css");
-@import url("./styles/gun.css");

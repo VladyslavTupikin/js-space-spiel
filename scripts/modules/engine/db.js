@@ -17,12 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { PlayerShip } from "./player-ship.js";
 import { CollisionModel } from "./collision-model.js";
 import { RenderModel } from "./render-model.js";
-import { EnemyShip } from "./enemy-ship.js";
-import { Map } from "./map.js";
-import { Stats } from "./stats.js";
 import { TreeNode } from "./tree-node.js";
 
 const gameContainerClass = "game-container";
@@ -78,19 +74,6 @@ export class Database {
   }
 
   RemoveCollisionModel(id) {}
-
-  //   AddRenderModel(object) {
-  //     if (!(object instanceof RenderModel)) {
-  //       throw new TypeError(
-  //         "Invalid type: parameter object must be an instance of CollisionModel",
-  //       );
-  //     }
-
-  //     const node = new TreeNode(object.styleClass, object);
-  //     this.#renderModels.addChild(node);
-
-  //     return true;
-  //   }
 
   AddRenderModel(object, parent) {
     if (!(object instanceof RenderModel)) {

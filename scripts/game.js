@@ -18,29 +18,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 /* General types */
-import { Database } from "./modules/db.js";
-import { TreeNode } from "./modules/tree-node.js";
-import { Point } from "./modules/point.js";
+import { Database } from "./modules/engine/db.js";
+import { TreeNode } from "./modules/engine/tree-node.js";
+import { Point } from "./modules/engine/point.js";
 
 /* Game board */
-import { Map } from "./modules/map.js";
-import { Stats } from "./modules/stats.js";
+import { Map } from "./modules/logic/map.js";
+import { Stats } from "./modules/logic/stats.js";
 
 /* Map objects */
-import { PlayerShip } from "./modules/player-ship.js";
-import { EnemyShip } from "./modules/enemy-ship.js";
+import { PlayerShip } from "./modules/logic/player-ship.js";
+import { EnemyShip } from "./modules/logic/enemy-ship.js";
+import { PistolGun } from "./modules/logic/pistol-gun.js";
 
 /* Engines */
-import { RenderModel } from "./modules/render-model.js";
-import { RenderEngine } from "./modules/render-engine.js";
-import { CollisionModel } from "./modules/collision-model.js";
-import { CollisionEngine } from "./modules/collision-engine.js";
+import { RenderModel } from "./modules/engine/render-model.js";
+import { RenderEngine } from "./modules/engine/render-engine.js";
+import { CollisionModel } from "./modules/engine/collision-model.js";
+import { CollisionEngine } from "./modules/engine/collision-engine.js";
 
 /* Event handlers */
-import { InputManager } from "./modules/input-manager.js";
-
-/* Unused */
-import { Style } from "./modules/style.js";
+import { InputManager } from "./modules/logic/input-manager.js";
 
 const db = new Database();
 
@@ -67,6 +65,7 @@ function main() {
     Math.max(player.width, player.height) / 2,
     new Point(player.center.x, player.center.y),
   );
+
   const playerRenderModel = new RenderModel(db, player.id, true, "player-ship");
 
   db.AddObjects(
@@ -85,7 +84,7 @@ function main() {
   const enemy = new EnemyShip(db, 50, 50, new Point(300, 0), 1);
   const enemyCollisionModel = new CollisionModel(
     enemy.id,
-    Math.max(player.width, player.height) / 2,
+    Math.max(enemy.width, enemy.height) / 2,
     enemy.center,
   );
   const enemyRenderModel = new RenderModel(db, enemy.id, true, "enemy-ship");
@@ -97,6 +96,25 @@ function main() {
     newMapRenderModel.styleClass,
   );
 
+  /* Player weapon */
+  const pistol = new PistolGun(db, 100, player.center, -1);
+  player.gunID = pistol.id;
+
+  const pistolCollisionModel = new CollisionModel(
+    enemy.id,
+    Math.max(player.width, player.height) / 2,
+    new Point(0, 0),
+  );
+  const pistolRenderModel = new RenderModel(db, pistol.id, true, "pistol");
+
+  pistolRenderModel.isVisible = true;
+  db.AddObjects(
+    pistol,
+    pistolCollisionModel,
+    pistolRenderModel,
+    newMapRenderModel.styleClass,
+  );
+
   //   for (const obj of db.gameObjects) {
   //     console.log(obj);
   //   }
@@ -105,13 +123,14 @@ function main() {
   //   playerRenderModel.renderObject();
   //   newStatsRenderModel.renderObject();
   //   enemyRenderModel.renderObject();
+  //   pistolRenderModel.renderObject();
 
   //console.log(db.GetGameObject(newMapRenderModel.id));
   const renderEngine = new RenderEngine(db);
   renderEngine.startRenderEngine();
 
   const inputManager = new InputManager(db, player.id);
-  inputManager.InitMovement();
+  inputManager.startInputManager();
 
   const collisionEngine = new CollisionEngine(db);
   collisionEngine.startCollisionEngine();

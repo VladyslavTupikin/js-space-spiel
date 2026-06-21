@@ -62,8 +62,6 @@ export class TreeNode {
     }
   }
 
-  //static getMyParent(childName)
-
   getParentNode(childName, parent) {
     if (childName === this.#name) {
       return parent;

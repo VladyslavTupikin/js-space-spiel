@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Style } from "./style.js";
 import { Database } from "./db.js";
 import { Point } from "./point.js";
 
@@ -76,6 +75,7 @@ export class RenderModel {
     if (typeof value !== "boolean") {
       throw new TypeError("Invalid type: visible value must be boolean");
     }
+
     this.#isVisible = value;
   }
 

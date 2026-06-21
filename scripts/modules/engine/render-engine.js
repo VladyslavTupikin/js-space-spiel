@@ -51,14 +51,15 @@ export class RenderEngine {
   }
 
   /**
-   * Starts the continuous async render loop at ~30 FPS.
+   * Starts the continuous async render loop at limiterFPS FPS.
    */
   async startRenderEngine() {
     if (this.#isRendering) return; // Prevent multiple loops from running simultaneously
     this.#isRendering = true;
 
     const targetFPS = this.#db.limiterFPS;
-    const frameDuration = 1000 / targetFPS; // ~33.33ms
+    const second = 1000;
+    const frameDuration = second / targetFPS;
 
     const renderCB = (node) => {
       if (node.object) {
@@ -81,7 +82,8 @@ export class RenderEngine {
 
       // Calculate how long the execution took
       const executionTime = performance.now() - startTime;
-      // Calculate how much time is left to maintain 30 FPS
+
+      // Calculate how much time is left to maintain limiterFPS FPS
       const remainingTime = Math.max(0, frameDuration - executionTime);
 
       // Wait out the remaining time for this frame

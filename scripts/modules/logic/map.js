@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Database } from "./db.js";
-import { Point } from "./point.js";
+import { Database } from "../engine/db.js";
+import { Point } from "../engine/point.js";
 
 export class Map {
   static #instance = null;

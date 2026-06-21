@@ -1,5 +1,5 @@
 /*
-stats.js: Module describes singleton Stats class.
+ship.js: Module describes ship as a base class.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,32 +17,25 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Database } from "./db.js";
-import { Point } from "./point.js";
+import { Point } from "../engine/point.js";
+import { CollisionModel } from "../engine/collision-model.js";
 
-export class Stats {
-  static #instance = null;
+export class Ship {
   #id;
   #width;
   #height;
-  #db;
   #center;
+  #health;
 
-  constructor(db, width = 600, height = 800, center) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
-    if (Stats.#instance) {
-      return Stats.#instance;
-    }
-
-    if (![width, height].every((p) => Number.isFinite(p))) {
-      throw new TypeError(
-        `Invalid type: width:${width} / height:${height} is not a number`,
-      );
+  constructor(
+    id,
+    width = 50,
+    height = 50,
+    center = new Point(0, 0),
+    health = 1,
+  ) {
+    if (![id, width, height, health].every((p) => Number.isFinite(p))) {
+      throw new TypeError("Invalid type: width/height/health is not a number");
     }
 
     if (!(center instanceof Point)) {
@@ -51,16 +44,27 @@ export class Stats {
       );
     }
 
-    this.#id = db.GenerateID();
+    this.#id = id;
     this.#width = width;
     this.#height = height;
-    this.#db = db;
+    this.#health = health;
     this.#center = center;
-    Stats.#instance = this;
   }
 
   toString() {
-    return `${this.#width} ${this.#height}`;
+    return `${this.#id} ${this.#width} ${this.#height} ${this.#health} ${this.#center.toString()}`;
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  set id(value) {
+    if (!Number.isFinite(value)) {
+      throw new TypeError("Invalid type: id must be a finite number");
+    }
+
+    this.#id = value;
   }
 
   get width() {
@@ -71,25 +75,25 @@ export class Stats {
     return this.#height;
   }
 
-  set width(value) {
-    if (!Number.isFinite(value)) {
-      throw new TypeError("Invalid input: value not a number");
-    }
-    this.#width = value;
+  get health() {
+    return this.#health;
   }
 
-  set height(value) {
+  set health(value) {
     if (!Number.isFinite(value)) {
-      throw new TypeError("Invalid input: value not a number");
+      throw new TypeError(
+        "Invalid value: health point must be a finite number",
+      );
     }
-    this.#height = value;
-  }
 
-  get id() {
-    return this.#id;
+    this.#health = value;
   }
 
   get center() {
     return this.#center;
+  }
+
+  move() {
+    // trigger physics to move
   }
 }

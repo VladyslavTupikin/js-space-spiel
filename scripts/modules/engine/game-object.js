@@ -1,5 +1,5 @@
 /*
-style.js: Module describes styles from CSS.
+game-object.js: Module describes base game object for the game engine.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -17,44 +17,57 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export class Style {
-  #styleClass;
-  #stylecss;
+import { Database } from "./db.js";
+import { Point } from "./point.js";
 
-  constructor(styleClass) {
+export class GameObject {
+  #id;
+  #db;
+  #center;
+  #styleClass;
+
+  constructor(db, center, styleClass) {
+    if (!(db instanceof Database)) {
+      throw new TypeError(
+        "Invalid type: parameter db must be an instance of Database",
+      );
+    }
+
     if (typeof styleClass !== "string" || styleClass.length === 0) {
       throw new TypeError(
         "Invalid type: parameter styleClass must be a valid HTML class String",
       );
     }
 
+    if (!(center instanceof Point)) {
+      throw new TypeError(
+        "Invalid type: parameter point must be an instance of Point",
+      );
+    }
+
+    this.#id = db.GenerateID();
+    this.#db = db;
+    this.#center = center;
     this.#styleClass = styleClass;
-    //this.#stylesCSS = Style.loadStyle(pathToStyle);
   }
 
   toString() {
-    return `${this.#styleClass} ${this.#stylecss}`;
+    return `${this.#id}` + this.#center.toString + `${this.#styleClass}`;
   }
 
-  static loadStyle(styleClass) {
-    const styleElement = document.querySelector(styleClass);
-    const styleContent = window.getComputedStyle(styleElement);
-    if (styleContent) {
-      this.#styleClass = styleContent;
-    }
+  get id() {
+    return this.#id;
+  }
 
-    return false;
+  get db() {
+    return this.#db;
+  }
+
+  get center() {
+    return this.#center;
   }
 
   get styleClass() {
     return this.#styleClass;
-  }
-
-  set styleClass(path) {
-    this.#styleClass = path;
-  }
-
-  get stylecss() {
-    return this.#stylecss;
   }
 }

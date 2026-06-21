@@ -1,5 +1,5 @@
 /*
-player-ship.js: Module describes player ship as extension of Ship class.
+enemy-ship.js: Module describes enemy ship as extension of Ship class.
 Copyright (C) 2026  Vladyslav Tupikin
 Contact: vladtupikin7@gmail.com
 
@@ -18,12 +18,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { Ship } from "./ship.js";
-import { Database } from "./db.js";
+import { Database } from "../engine/db.js";
 
-export class PlayerShip extends Ship {
-  static #healthMultiplier = 2;
-  #db;
+export class EnemyShip extends Ship {
+  //#listeners;
+  static #healthMultiplier = 1;
   #id;
+  #db;
 
   constructor(db, width, height, center, health) {
     if (!(db instanceof Database)) {
@@ -32,9 +33,8 @@ export class PlayerShip extends Ship {
       );
     }
 
-    const hp = health * PlayerShip.#healthMultiplier;
+    const hp = health * EnemyShip.#healthMultiplier;
     const id = db.GenerateID();
-
     super(id, width, height, center, hp);
 
     this.#db = db;
@@ -42,6 +42,6 @@ export class PlayerShip extends Ship {
   }
 
   toString() {
-    return super.toString();
+    return `super.toString()`;
   }
 }
