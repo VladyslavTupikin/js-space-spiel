@@ -24,18 +24,11 @@ export class GameObject {
   #id;
   #db;
   #center;
-  #styleClass;
 
-  constructor(db, center, styleClass) {
+  constructor(db, center) {
     if (!(db instanceof Database)) {
       throw new TypeError(
         "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
-    if (typeof styleClass !== "string" || styleClass.length === 0) {
-      throw new TypeError(
-        "Invalid type: parameter styleClass must be a valid HTML class String",
       );
     }
 
@@ -48,11 +41,10 @@ export class GameObject {
     this.#id = db.GenerateID();
     this.#db = db;
     this.#center = center;
-    this.#styleClass = styleClass;
   }
 
   toString() {
-    return `${this.#id}` + this.#center.toString + `${this.#styleClass}`;
+    return `${this.#id}` + this.#center.toString;
   }
 
   get id() {
@@ -65,9 +57,5 @@ export class GameObject {
 
   get center() {
     return this.#center;
-  }
-
-  get styleClass() {
-    return this.#styleClass;
   }
 }
