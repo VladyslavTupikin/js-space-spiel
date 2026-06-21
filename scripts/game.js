@@ -76,7 +76,7 @@ function main() {
   );
 
   /*-- Statistics -- */
-  const stats = new Stats(db, 200, 500, new Point(0, 0));
+  const stats = new Stats(db, new Point(0, 0), 200, 500);
   const newStatsRenderModel = new RenderModel(db, stats.id, false, "stats");
   db.AddObjects(stats, null, newStatsRenderModel);
 

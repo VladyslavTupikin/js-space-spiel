@@ -19,21 +19,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { Database } from "../engine/db.js";
 import { Point } from "../engine/point.js";
+import { GameObject } from "../engine/game-object.js";
 
-export class Stats {
+export class Stats extends GameObject {
   static #instance = null;
-  #id;
+
   #width;
   #height;
-  #db;
   #center;
 
-  constructor(db, width = 600, height = 800, center) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
+  constructor(db, center, width = 600, height = 800) {
+    super(db, center);
 
     if (Stats.#instance) {
       return Stats.#instance;
@@ -45,22 +41,13 @@ export class Stats {
       );
     }
 
-    if (!(center instanceof Point)) {
-      throw new TypeError(
-        "Invalid type: parameter point must be an instance of Point",
-      );
-    }
-
-    this.#id = db.GenerateID();
     this.#width = width;
     this.#height = height;
-    this.#db = db;
-    this.#center = center;
     Stats.#instance = this;
   }
 
   toString() {
-    return `${this.#width} ${this.#height}`;
+    return super.toString() + `${this.#width} ${this.#height}`;
   }
 
   get width() {
@@ -83,13 +70,5 @@ export class Stats {
       throw new TypeError("Invalid input: value not a number");
     }
     this.#height = value;
-  }
-
-  get id() {
-    return this.#id;
-  }
-
-  get center() {
-    return this.#center;
   }
 }
