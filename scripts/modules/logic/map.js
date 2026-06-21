@@ -19,28 +19,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { Database } from "../engine/db.js";
 import { Point } from "../engine/point.js";
+import { GameObject } from "../engine/game-object.js";
 
-export class Map {
+export class Map extends GameObject {
   static #instance = null;
-  #id;
+
   #width;
   #height;
   #measureUnit = "px";
-  #db;
-  #center;
 
-  constructor(db, width = 600, height = 800, center) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
-    if (!(center instanceof Point)) {
-      throw new TypeError(
-        "Invalid type: parameter point must be an instance of Point",
-      );
-    }
+  constructor(db, center, width = 600, height = 800) {
+    super(db, center);
 
     if (Map.#instance) {
       return Map.#instance;
@@ -52,16 +41,15 @@ export class Map {
       );
     }
 
-    this.#id = db.GenerateID();
     this.#width = width;
     this.#height = height;
-    this.#db = db;
-    this.#center = center;
     Map.#instance = this;
   }
 
   toString() {
-    return `${this.#width} ${this.#height} ${this.#measureUnit}`;
+    return (
+      super.toString() + `${this.#width} ${this.#height} ${this.#measureUnit}`
+    );
   }
 
   get width() {
@@ -88,13 +76,5 @@ export class Map {
 
   get measureUnit() {
     return this.#measureUnit;
-  }
-
-  get id() {
-    return this.#id;
-  }
-
-  get center() {
-    return this.#center;
   }
 }

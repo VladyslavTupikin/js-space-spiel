@@ -48,7 +48,7 @@ function main() {
   //console.log("Game started");
 
   /*-- Map -- */
-  const newMap = new Map(db, 650, 800, new Point(0, 0));
+  const newMap = new Map(db, new Point(0, 0), 650, 800);
   const newMapCollisionModel = new CollisionModel(
     newMap.id,
     Math.max(newMap.width, newMap.height) / 2,
