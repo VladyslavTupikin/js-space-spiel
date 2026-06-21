@@ -19,52 +19,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { Point } from "../engine/point.js";
 import { CollisionModel } from "../engine/collision-model.js";
+import { GameObject } from "../engine/game-object.js";
 
-export class Ship {
-  #id;
+export class Ship extends GameObject {
   #width;
   #height;
-  #center;
   #health;
 
   constructor(
-    id,
+    db,
+    center = new Point(0, 0),
     width = 50,
     height = 50,
-    center = new Point(0, 0),
     health = 1,
   ) {
-    if (![id, width, height, health].every((p) => Number.isFinite(p))) {
+    super(db, center);
+
+    if (![width, height, health].every((p) => Number.isFinite(p))) {
       throw new TypeError("Invalid type: width/height/health is not a number");
     }
 
-    if (!(center instanceof Point)) {
-      throw new TypeError(
-        "Invalid type: parameter point must be an instance of Point",
-      );
-    }
-
-    this.#id = id;
     this.#width = width;
     this.#height = height;
     this.#health = health;
-    this.#center = center;
   }
 
   toString() {
-    return `${this.#id} ${this.#width} ${this.#height} ${this.#health} ${this.#center.toString()}`;
-  }
-
-  get id() {
-    return this.#id;
-  }
-
-  set id(value) {
-    if (!Number.isFinite(value)) {
-      throw new TypeError("Invalid type: id must be a finite number");
-    }
-
-    this.#id = value;
+    return super.toString() + `${this.#width} ${this.#height} ${this.#health}`;
   }
 
   get width() {
@@ -87,10 +68,6 @@ export class Ship {
     }
 
     this.#health = value;
-  }
-
-  get center() {
-    return this.#center;
   }
 
   move() {

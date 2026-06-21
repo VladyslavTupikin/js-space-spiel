@@ -22,28 +22,16 @@ import { Database } from "../engine/db.js";
 
 export class PlayerShip extends Ship {
   static #healthMultiplier = 2;
-  #db;
-  #id;
   #gunID;
 
-  constructor(db, width, height, center, health) {
-    if (!(db instanceof Database)) {
-      throw new TypeError(
-        "Invalid type: parameter db must be an instance of Database",
-      );
-    }
-
+  constructor(db, center, width, height, health) {
     const hp = health * PlayerShip.#healthMultiplier;
-    const id = db.GenerateID();
 
-    super(id, width, height, center, hp);
-
-    this.#db = db;
-    this.#id = id;
+    super(db, center, width, height, hp);
   }
 
   toString() {
-    return super.toString() + `${this.#gunID}`;
+    return super.toString() + `${this.#gunID} ${this.#healthMultiplier}`;
   }
 
   get gunID() {

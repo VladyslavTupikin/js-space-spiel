@@ -59,7 +59,7 @@ function main() {
   db.AddObjects(newMap, newMapCollisionModel, newMapRenderModel);
 
   /*-- Player -- */
-  const player = new PlayerShip(db, 50, 50, new Point(300, 700), 2);
+  const player = new PlayerShip(db, new Point(300, 700), 50, 50, 2);
   const playerCollisionModel = new CollisionModel(
     player.id,
     Math.max(player.width, player.height) / 2,
@@ -81,7 +81,7 @@ function main() {
   db.AddObjects(stats, null, newStatsRenderModel);
 
   /*-- Enemy -- */
-  const enemy = new EnemyShip(db, 50, 50, new Point(300, 0), 1);
+  const enemy = new EnemyShip(db, new Point(300, 0), 50, 50, 1);
   const enemyCollisionModel = new CollisionModel(
     enemy.id,
     Math.max(enemy.width, enemy.height) / 2,
